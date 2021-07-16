@@ -6,7 +6,7 @@ import passport from "passport";
 
 import router from "./routes/index";
 
-require ("dotenv").config();;
+require("dotenv").config();
 require("./mongo-connection");
 
 const app = express();
@@ -21,9 +21,6 @@ app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 app.use("/", router);
-
- 
 
 module.exports = app;
