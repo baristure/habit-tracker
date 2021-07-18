@@ -5,7 +5,7 @@ import { sign } from "jsonwebtoken";
 //Load User Model
 import User from "../models/user.model";
 
-const router = express.Router();
+const userRouter = express.Router();
 
 const signToken = (userID) => {
   return sign(
@@ -19,7 +19,7 @@ const signToken = (userID) => {
 };
 
 // Register
-router.post("/register", (req, res) => {
+userRouter.post("/register", (req, res) => {
   const { email, username, password } = req.body;
   User.findOne({ email }, (err, user) => {
     if (err)
@@ -56,23 +56,23 @@ router.post("/register", (req, res) => {
 });
 
 // Login
-router.post(
+userRouter.post(
   "/login",
   passport.authenticate("local", { session: false }),
   (req, res) => {
     if (req.isAuthenticated()) {
       const { _id, email, username } = req.user;
       const token = signToken(_id);
-      res.cookie("access_token", token, { httpOnly: true, sameSite: true });
+      res.cookie("access_token", token, { httpOnly: true , sameSite: true });
       res
         .status(200)
-        .json({ isAuthenticated: true, user: { email, username, role } });
+         .json({ isAuthenticated: true, user: { email, username  }});
     }
   }
 );
 
 // Logout
-router.get(
+userRouter.get(
   "/logout",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
@@ -81,4 +81,15 @@ router.get(
   }
 );
 
-module.exports = router;
+userRouter.get('/todos',passport.authenticate('jwt',{session : false}),(req,res)=>{
+    User.findById({_id : req.user._id}).exec((err,document)=>{
+        if(err)
+            res.status(500).json({message : {msgBody : "Error has occured", msgError: true}});
+        else{
+            res.status(200).json({todos :console.log({document}), authenticated : true});
+        }
+    });
+});
+
+
+module.exports = userRouter;
