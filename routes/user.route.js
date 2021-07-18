@@ -4,16 +4,17 @@ import { sign } from "jsonwebtoken";
 
 //Load User Model
 import User from "../models/user.model";
-
+import passportConfig from "../helpers/passport";
+ 
 const userRouter = express.Router();
 
 const signToken = (userID) => {
   return sign(
     {
-      iss: process.env.SECRET,
+      iss: process.env.SECRETKEY,
       id: userID,
     },
-    process.env.SECRET,
+    process.env.SECRETKEY,
     { expiresIn: "1h" }
   );
 };

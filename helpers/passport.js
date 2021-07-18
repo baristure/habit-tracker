@@ -1,10 +1,10 @@
 import passport from "passport";
-// import { Strategy as LocalStrategy } from "passport-local";
-// import { Strategy as JwtStrategy } from "passport-jwt";
-const LocalStrategy = require('passport-local').Strategy;
-const JwtStrategy = require('passport-jwt').Strategy;
+import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as JwtStrategy } from "passport-jwt";
 
-const User = require("../models/user.model");
+import User from "../models/user.model";
+
+require("dotenv").config();
 
 const cookieExtractor = (req) => {
   let token = null;
@@ -19,7 +19,7 @@ passport.use(
   new JwtStrategy(
     {
       jwtFromRequest: cookieExtractor,
-      secretOrKey: process.env.SECRET,
+      secretOrKey: process.env.SECRETKEY,
     },
     (payload, done) => {
       User.findById({ _id: payload.id }, (err, user) => {

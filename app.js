@@ -5,10 +5,9 @@ import cors from "cors";
 import passport from "passport";
 
 import router from "./routes/index";
-
+import mongoConnection from "./mongo-connection";
 require("dotenv").config();
-require("./mongo-connection");
-
+ 
 const app = express();
 app.use(cors());
 
