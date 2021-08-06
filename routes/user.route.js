@@ -4,8 +4,8 @@ import { sign } from "jsonwebtoken";
 
 //Load User Model
 import User from "../models/user.model";
-import passportConfig from "../helpers/passport";
- 
+import passportConfig from "../config/passport";
+
 const userRouter = express.Router();
 
 const signToken = (userID) => {
@@ -28,29 +28,23 @@ userRouter.post("/register", (req, res) => {
         .status(500)
         .json({ message: { msgBody: "Error has occured", msgError: true } });
     if (user)
-      res
-        .status(400)
-        .json({
-          message: { msgBody: "Email is already taken", msgError: true },
-        });
+      res.status(400).json({
+        message: { msgBody: "Email is already taken", msgError: true },
+      });
     else {
       const newUser = new User({ email, username, password });
       newUser.save((err) => {
         if (err)
-          res
-            .status(500)
-            .json({
-              message: { msgBody: "Error has occured", msgError: true },
-            });
+          res.status(500).json({
+            message: { msgBody: "Error has occured", msgError: true },
+          });
         else
-          res
-            .status(201)
-            .json({
-              message: {
-                msgBody: "Account successfully created",
-                msgError: false,
-              },
-            });
+          res.status(201).json({
+            message: {
+              msgBody: "Account successfully created",
+              msgError: false,
+            },
+          });
       });
     }
   });
@@ -64,10 +58,10 @@ userRouter.post(
     if (req.isAuthenticated()) {
       const { _id, email, username } = req.user;
       const token = signToken(_id);
-      res.cookie("access_token", token, { httpOnly: true , sameSite: true });
+      res.cookie("access_token", token, { httpOnly: true, sameSite: true });
       res
         .status(200)
-         .json({ isAuthenticated: true, user: { email, username  }});
+        .json({ isAuthenticated: true, user: { email, username } });
     }
   }
 );
@@ -82,15 +76,22 @@ userRouter.get(
   }
 );
 
-userRouter.get('/todos',passport.authenticate('jwt',{session : false}),(req,res)=>{
-    User.findById({_id : req.user._id}).exec((err,document)=>{
-        if(err)
-            res.status(500).json({message : {msgBody : "Error has occured", msgError: true}});
-        else{
-            res.status(200).json({todos :console.log({document}), authenticated : true});
-        }
+userRouter.get(
+  "/todos",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById({ _id: req.user._id }).exec((err, document) => {
+      if (err)
+        res
+          .status(500)
+          .json({ message: { msgBody: "Error has occured", msgError: true } });
+      else {
+        res
+          .status(200)
+          .json({ todos: console.log({ document }), authenticated: true });
+      }
     });
-});
-
+  }
+);
 
 module.exports = userRouter;
