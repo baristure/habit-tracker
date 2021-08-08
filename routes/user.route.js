@@ -3,8 +3,9 @@ import passport from "passport";
 import { sign } from "jsonwebtoken";
 
 //Load User Model
-import User from "../models/user.model";
+import { User } from "../models";
 import passportConfig from "../config/passport";
+import auth from "../middlewares/auth";
 
 const userRouter = express.Router();
 
@@ -54,6 +55,7 @@ userRouter.post("/register", (req, res) => {
 userRouter.post(
   "/login",
   passport.authenticate("local", { session: false }),
+
   (req, res) => {
     if (req.isAuthenticated()) {
       const { _id, email, username } = req.user;
@@ -79,6 +81,7 @@ userRouter.get(
 userRouter.get(
   "/todos",
   passport.authenticate("jwt", { session: false }),
+  // auth(),
   (req, res) => {
     User.findById({ _id: req.user._id }).exec((err, document) => {
       if (err)
