@@ -32,17 +32,20 @@ const register = catchAsync(async (req, res) => {
     else {
       const newUser = new User({ email, username, password });
       newUser.save((err) => {
-        if (err)
-          res.status(500).json({
+        if (err) {
+          let response = {
             message: { msgBody: "Error has occured", msgError: true },
-          });
-        else
-          res.status(201).json({
+          };
+          res.status(httpStatus.OK).send(response);
+        } else {
+          let response = {
             message: {
               msgBody: "Account successfully created",
               msgError: false,
             },
-          });
+          };
+          res.status(httpStatus.CREATED).send(response);
+        }
       });
     }
   });
