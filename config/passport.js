@@ -3,8 +3,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy } from "passport-jwt";
 
 import User from "../models/user.model";
-
-require("dotenv").config();
+import config from "./config";
 
 const cookieExtractor = (req) => {
   let token = null;
@@ -19,7 +18,7 @@ passport.use(
   new JwtStrategy(
     {
       jwtFromRequest: cookieExtractor,
-      secretOrKey: process.env.SECRETKEY,
+      secretOrKey: config.secretKey,
     },
     (payload, done) => {
       User.findById({ _id: payload.id }, (err, user) => {
