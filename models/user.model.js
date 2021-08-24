@@ -24,17 +24,22 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-    },
-    created_at: {
-      type: Date,
-      default: Date.now(),
+      private: true,
     },
   },
   {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id.toString();
+        delete ret._id;
+        delete ret.created_at;
+        delete ret.password;
+        delete ret.__v;
+      },
+    },
     timestamps: true,
   }
 );
-// add plugin that converts mongoose to json
 
 /**
  * Check if email is taken
@@ -42,7 +47,6 @@ const UserSchema = new mongoose.Schema(
  * @param {ObjectId} [excludeUserId] - The id of the user to be excluded
  * @returns {Promise<boolean>}
  */
-
 UserSchema.statics.isEmailTaken = async function (email, excludeUserId) {
   const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
   return !!user;

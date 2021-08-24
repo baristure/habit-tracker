@@ -7,22 +7,12 @@ import catchAsync from "../utils/CatchAsync";
 import passportConfig from "../config/passport";
 import config from "../config/config";
 import { userService } from "../services";
-
-const signToken = (userID) => {
-  return sign(
-    {
-      iss: config.secretKey,
-      id: userID,
-    },
-    config.secretKey,
-    { expiresIn: "1h" }
-  );
-};
+import Signtoken from "../utils/TokenGenerate";
 
 const login = catchAsync(async (req, res) => {
   if (req.isAuthenticated()) {
     const { _id, email, username } = req.user;
-    const token = signToken(_id);
+    const token = Signtoken(_id);
     res.cookie("access_token", token, { httpOnly: true, sameSite: true });
     let response = { isAuthenticated: true, user: { email, username } };
     res.status(httpStatus.OK).send(response);

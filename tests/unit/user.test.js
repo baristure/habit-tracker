@@ -1,6 +1,6 @@
 import faker from "faker";
-import { User } from "../../../models";
-import setupTestDB from "../../utils/setupTestDB";
+import { User } from "../../models";
+import setupTestDB from "../utils/setupTestDB";
 
 setupTestDB();
 
@@ -17,9 +17,17 @@ describe("User model tests", () => {
     });
 
     it("Should correctly create a user", async () => {
-      const user = await User.create(newUser);
+      let error = null;
+      let user = null;
+      try {
+        user = await User.create(newUser);
+      } catch (e) {
+        error = e;
+      }
+
       expect(user.email).toEqual(newUser.email);
       expect(user.username).toEqual(newUser.username);
+      expect(error).toBeNull();
     });
 
     it("Should not validate user without valid email", async () => {

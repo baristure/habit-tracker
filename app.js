@@ -9,7 +9,7 @@ import xss from "xss-clean";
 import compression from "compression";
 
 import router from "./routes/index";
-import mongoConnection from "./mongo-connection";
+
 import config from "./config/config";
 
 require("dotenv").config();

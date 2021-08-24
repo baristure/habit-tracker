@@ -18,7 +18,7 @@ passport.use(
   new JwtStrategy(
     {
       jwtFromRequest: cookieExtractor,
-      secretOrKey: config.secretKey,
+      secretOrKey: config.jwt.secretKey,
     },
     (payload, done) => {
       User.findById({ _id: payload.id }, (err, user) => {

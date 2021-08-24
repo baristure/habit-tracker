@@ -1,5 +1,5 @@
 import app from "./app";
-
+import mongoConnection from "./mongo-connection";
 import config from "./config/config";
 import logger from "./config/logger";
 

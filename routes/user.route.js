@@ -9,6 +9,7 @@ import { userController } from "../controllers/index";
 const userRouter = express.Router();
 
 userRouter.post("/register", userController.createUser);
+userRouter.get("/get/:userId", userController.getUser);
 
 userRouter.get("/todos", auth.checkAuth(), (req, res) => {
   console.log(req);
