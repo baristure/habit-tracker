@@ -11,6 +11,7 @@ import compression from "compression";
 import router from "./routes/index";
 
 import config from "./config/config";
+import { jwtStrategy } from "./config/passport";
 
 require("dotenv").config();
 
@@ -42,8 +43,12 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 // Passport middleware
+// app.use(passport.initialize());
+// app.use(passport.session());
+
+// jwt authentication
 app.use(passport.initialize());
-app.use(passport.session());
+passport.use("jwt", jwtStrategy);
 
 app.use("/api", router);
 

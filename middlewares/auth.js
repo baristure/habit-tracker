@@ -23,15 +23,6 @@ const checkAuth = () => async (req, res, next) => {
     .catch((err) => next(err));
 };
 
-const setAuth = () => async (req, res, next) => {
-  return new Promise((resolve, reject) => {
-    passport.authenticate("local", { session: false })(req, res, next);
-  })
-    .then(() => next())
-    .catch((err) => next(err));
-};
-
 module.exports = {
   checkAuth,
-  setAuth,
 };

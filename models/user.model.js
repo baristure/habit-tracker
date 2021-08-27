@@ -18,6 +18,7 @@ const UserSchema = new mongoose.Schema(
     },
     username: {
       type: String,
+      unique: true,
       required: true,
     },
     password: {
@@ -32,7 +33,8 @@ const UserSchema = new mongoose.Schema(
       transform(doc, ret) {
         ret.id = ret._id.toString();
         delete ret._id;
-        delete ret.created_at;
+        delete ret.createdAt;
+        delete ret.updatedAt;
         delete ret.password;
         delete ret.__v;
       },
@@ -68,14 +70,9 @@ UserSchema.statics.isUsernameTaken = async function (username, excludeUserId) {
  * @param {string} password
  * @returns {Promise<boolean>}
  */
-UserSchema.methods.comparePassword = function (password, cb) {
-  bcrypt.compare(password, this.password, (err, isMatch) => {
-    if (err) return cb(err);
-    else {
-      if (!isMatch) return cb(null, isMatch);
-      return cb(null, this);
-    }
-  });
+UserSchema.methods.comparePassword = async function (password) {
+  const user = this;
+  return bcrypt.compare(password, user.password);
 };
 
 UserSchema.pre("save", function (next) {

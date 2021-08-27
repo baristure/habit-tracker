@@ -20,21 +20,38 @@ const createUser = async (userBody) => {
 };
 
 /**
+ * Get user by username
+ * @param {string} username
+ * @returns {Promise<User>}
+ */
+const getUserByUsername = async (username) => {
+  return User.findOne({ username });
+};
+
+/**
+ * Login with username and password
+ * @param {string} username
+ * @param {string} password
+ * @returns {Promise<User>}
+ */
+const loginUserWithUsernameAndPassword = async (username, password) => {
+  const user = await getUserByUsername(username);
+  if (!user || !(await user.comparePassword(password))) {
+    throw new ApiError(
+      httpStatus.UNAUTHORIZED,
+      "Incorrect username or password"
+    );
+  }
+  return user;
+};
+
+/**
  * Get user by id
  * @param {ObjectId} id
  * @returns {Promise<User>}
  */
 const getUserById = async (id) => {
   return User.findById(id);
-};
-
-/**
- * Get user by email
- * @param {string} email
- * @returns {Promise<User>}
- */
-const getUserByEmail = async (email) => {
-  return User.findOne({ email });
 };
 
 /**
@@ -54,6 +71,7 @@ const deleteUserById = async (userId) => {
 module.exports = {
   createUser,
   getUserById,
-  getUserByEmail,
+  getUserByUsername,
   deleteUserById,
+  loginUserWithUsernameAndPassword,
 };

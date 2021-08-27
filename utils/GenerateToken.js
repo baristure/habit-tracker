@@ -12,7 +12,7 @@ const secret = config.jwt.secretKey;
  * @param {string} [secret]
  * @returns {string}
  */
-const SignToken = (userId) => {
+const generateToken = (userId) => {
   const payload = {
     sub: userId,
     iat: moment().unix(),
@@ -21,4 +21,4 @@ const SignToken = (userId) => {
   return sign(payload, secret);
 };
 
-module.exports = SignToken;
+module.exports = generateToken;
