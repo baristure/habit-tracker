@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=development nodemon --exec babel-node index.js",
+    "start": "cross-env NODE_ENV=development nodemon --exec babel-node src/index.js",
     "test": "jest -i --colors --verbose --detectOpenHandles",
     "test:watch": "jest -i --watchAll",
     "coverage": "jest -i --coverage",
@@ -39,7 +39,6 @@
     "mongoose-autopopulate": "^0.14.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "validator": "^13.6.0",
     "winston": "^3.3.3",
