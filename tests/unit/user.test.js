@@ -1,5 +1,5 @@
 import faker from "faker";
-import { User } from "../../models";
+import { User } from "../../src/models";
 import setupTestDB from "../utils/setupTestDB";
 
 setupTestDB();
