@@ -12,8 +12,8 @@ const verifyCallback = (req, resolve, reject) => async (err, user, info) => {
 };
 
 const checkAuth = () => async (req, res, next) => {
-  const token = req.cookies.jwt;
   return new Promise((resolve, reject) => {
+    const token = req.cookies.jwt;
     if (!token) {
       return reject(
         new ApiError(httpStatus.UNAUTHORIZED, "Please authenticate")
