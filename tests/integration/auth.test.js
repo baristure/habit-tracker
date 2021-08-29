@@ -5,6 +5,7 @@ import httpStatus from "http-status";
 import app from "../../src/app";
 import { User } from "../../src/models";
 import setupTestDB from "../utils/setupTestDB";
+import { insertUsers, userOne, userTwo } from "../utils/InsertUsers";
 
 setupTestDB();
 
@@ -41,42 +42,30 @@ describe("Auth routes", () => {
     });
 
     it("Should return 400 if email is already used", async () => {
-      await request(app).post("/api/auth/register").send(newUser);
+      insertUsers([userOne]);
 
       await request(app)
         .post("/api/auth/register")
-        .send(newUser)
+        .send(userOne)
         .expect(httpStatus.BAD_REQUEST);
     });
 
     it("Should return 400 if username is already used", async () => {
-      await request(app).post("/api/auth/register").send(newUser);
+      insertUsers([userOne]);
+
+      await request(app)
+        .post("/api/auth/register")
+        .send(userOne)
+        .expect(httpStatus.BAD_REQUEST);
+    });
+
+    it("Should return 400 if password is null", async () => {
+      newUser.password = null;
 
       await request(app)
         .post("/api/auth/register")
         .send(newUser)
         .expect(httpStatus.BAD_REQUEST);
-    });
-
-    test("should", async () => {
-      await request(app).post("/api/auth/register").send(newUser);
-
-      const loginCredentials = {
-        email: newUser.email,
-        username: newUser.username,
-        password: newUser.password,
-      };
-
-      const res = await request(app)
-        .post("/api/auth/login")
-        .send(loginCredentials)
-        .expect(httpStatus.OK);
-
-      expect(res.body.user).toEqual({
-        id: expect.anything(),
-        email: newUser.email,
-        username: newUser.username,
-      });
     });
   });
 });

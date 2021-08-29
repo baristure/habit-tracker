@@ -1,7 +1,7 @@
 import faker from "faker";
 import { User } from "../../src/models";
 import setupTestDB from "../utils/setupTestDB";
-
+import { expect, it } from "@jest/globals";
 setupTestDB();
 
 describe("User model tests", () => {

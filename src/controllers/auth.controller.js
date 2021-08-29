@@ -10,9 +10,13 @@ import { userService } from "../services";
 import generateToken from "../utils/GenerateToken";
 
 const register = catchAsync(async (req, res) => {
-  const { email } = req.body;
+  const { email, username, password } = req.body;
   if (email === null || email === "")
     throw new ApiError(httpStatus.BAD_REQUEST, "Email can not be blank");
+  if (username === null || username === "")
+    throw new ApiError(httpStatus.BAD_REQUEST, "Username can not be blank");
+  if (password === null || password === "")
+    throw new ApiError(httpStatus.BAD_REQUEST, "Password can not be blank");
   const user = await userService.createUser(req.body);
   res.status(httpStatus.CREATED).send(user);
 });
