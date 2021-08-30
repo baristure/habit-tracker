@@ -1,12 +1,11 @@
 import request from "supertest";
 import faker from "faker";
 import httpStatus from "http-status";
-import Cookies from "js-cookie";
 
 import app from "../../src/app";
 import { User } from "../../src/models";
 import setupTestDB from "../utils/setupTestDB";
-import { insertUsers, userOne, userTwo } from "../utils/InsertUsers";
+import { insertUsers, userOne } from "../utils/InsertUsers";
 import generateToken from "../../src/utils/GenerateToken";
 
 setupTestDB();
@@ -142,7 +141,6 @@ describe("Auth routes", () => {
         .send()
         .expect(httpStatus.NO_CONTENT);
       expect(res.header["set-cookie"][0].split(";")[0]).toEqual("jwt=");
-      console.log(res.body);
       expect(res.body).toBeDefined();
       expect(res.body).toMatchObject({});
     });
