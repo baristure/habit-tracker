@@ -5,7 +5,6 @@ const authApi = {
     const response = await axios
       .post("http://localhost:4000/api/auth/login", { username, password })
       .then((res) => {
-        console.log(res.data);
         return res;
       })
       .catch((err) => {
@@ -13,13 +12,19 @@ const authApi = {
       });
     return response;
   },
-  register: async (user) => {
+  register: async (email, username, password) => {
     const response = await axios
-      .post("http://localhost:4000/api/auth/register", user)
-      .then((res) => {
-        console.log(res.data);
+      .post("http://localhost:4000/api/auth/register", {
+        email,
+        username,
+        password,
       })
-      .catch((err) => console.log(err));
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err.response;
+      });
     return response;
   },
 };

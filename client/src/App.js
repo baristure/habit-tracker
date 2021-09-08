@@ -9,8 +9,8 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route exact component={Login} path="/login" />
-        <Route exact component={Register} path="/register" />
+        <Route exact component={Login} path="/sign-in" />
+        <Route exact component={Register} path="/sign-up" />
         <PrivateRoute exact component={Home} path="/" />
       </Switch>
     </Router>

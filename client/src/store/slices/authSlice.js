@@ -13,14 +13,11 @@ export const loginUser = createAsyncThunk(
         let resDataStr = JSON.stringify(data);
         Cookies.set("auth-jwt", resDataStr);
         return { ...data };
-      } else if (response.status === 401) {
-        return thunkAPI.rejectWithValue(data);
       } else {
         return thunkAPI.rejectWithValue(data);
       }
     } catch (e) {
-      console.log("e", e);
-      return thunkAPI.rejectWithValue(e.response);
+      return thunkAPI.rejectWithValue(e.response.message);
     }
   }
 );
@@ -29,19 +26,15 @@ export const registerUser = createAsyncThunk(
   "users/register",
   async ({ email, username, password }, thunkAPI) => {
     try {
-      const response = await authApi.login(username, password);
+      const response = await authApi.register(email, username, password);
       let data = response.data;
-      console.log(response.data);
-      if (response.status === 200) {
-        let resDataStr = JSON.stringify(data);
-        Cookies.set("auth-jwt", resDataStr);
+      if (response.status === 201) {
         return { ...data };
       } else {
         return thunkAPI.rejectWithValue(data);
       }
     } catch (e) {
-      console.log("Error", e.response.data);
-      return thunkAPI.rejectWithValue(e.response.data);
+      return thunkAPI.rejectWithValue(e.response.message);
     }
   }
 );
@@ -68,22 +61,31 @@ export const authSlice = createSlice({
     },
   },
   extraReducers: {
-    [registerUser.fulfilled]: (state, { payload }) => {},
-    [registerUser.rejected]: (state, { payload }) => {},
-    [registerUser.pending]: (state) => {},
+    [registerUser.fulfilled]: (state, { payload }) => {
+      state.email = payload.email;
+      state.username = payload.username;
+      state.id = payload.id;
+      state.isFetching = false;
+      state.isSuccess = true;
+      return state;
+    },
+    [registerUser.rejected]: (state, { payload }) => {
+      state.isFetching = false;
+      state.isError = true;
+      state.errorMessage = payload.message;
+    },
+    [registerUser.pending]: (state) => {
+      state.isFetching = true;
+    },
     [loginUser.fulfilled]: (state, { payload }) => {
-      console.log("fullfilled payload", payload);
-      console.log(state);
       state.email = payload.user.email;
       state.username = payload.user.username;
       state.id = payload.user.id;
       state.isFetching = false;
       state.isSuccess = true;
-      console.log(state);
       return state;
     },
     [loginUser.rejected]: (state, { payload }) => {
-      console.log("rejected payload", payload);
       state.isFetching = false;
       state.isError = true;
       state.errorMessage = payload.message;
