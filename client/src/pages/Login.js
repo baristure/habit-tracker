@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, Fragment } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -9,7 +10,7 @@ import Navbar from "../components/Navbar";
 const Login = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { register, errors, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm();
   const { isFetching, isSuccess, isError, errorMessage } =
     useSelector(authSelector);
   const onSubmit = (data) => {
@@ -29,7 +30,10 @@ const Login = () => {
 
     if (isSuccess) {
       dispatch(clearState());
-      history.push("/");
+      toast.success("You Have Successfully Logged in. Redirecting to homepage");
+      setTimeout(() => {
+        history.push("/");
+      }, 2000);
     }
   }, [isError, isSuccess]);
 
@@ -46,6 +50,7 @@ const Login = () => {
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
             <form
+              data-testid="login-form"
               className="space-y-6"
               onSubmit={handleSubmit(onSubmit)}
               method="POST"

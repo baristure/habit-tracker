@@ -60,41 +60,43 @@ export const authSlice = createSlice({
       return state;
     },
   },
-  extraReducers: {
-    [registerUser.fulfilled]: (state, { payload }) => {
+  extraReducers: (builder) => {
+    builder.addCase(registerUser.fulfilled, (state, { payload }) => {
       state.email = payload.email;
       state.username = payload.username;
       state.id = payload.id;
       state.isFetching = false;
       state.isSuccess = true;
       return state;
-    },
-    [registerUser.rejected]: (state, { payload }) => {
+    });
+    builder.addCase(registerUser.rejected, (state, { payload }) => {
       state.isFetching = false;
       state.isError = true;
       state.errorMessage = payload.message;
-    },
-    [registerUser.pending]: (state) => {
+    });
+    builder.addCase(registerUser.pending, (state) => {
       state.isFetching = true;
-    },
-    [loginUser.fulfilled]: (state, { payload }) => {
+    });
+    builder.addCase(loginUser.fulfilled, (state, { payload }) => {
       state.email = payload.user.email;
       state.username = payload.user.username;
       state.id = payload.user.id;
       state.isFetching = false;
       state.isSuccess = true;
       return state;
-    },
-    [loginUser.rejected]: (state, { payload }) => {
+    });
+    builder.addCase(loginUser.rejected, (state, { payload }) => {
       state.isFetching = false;
       state.isError = true;
       state.errorMessage = payload.message;
-    },
-    [loginUser.pending]: (state) => {
+    });
+    builder.addCase(loginUser.pending, (state) => {
       state.isFetching = true;
-    },
+    });
   },
 });
 export const { clearState } = authSlice.actions;
 
 export const authSelector = (state) => state.auth;
+
+export default authSlice.reducer;

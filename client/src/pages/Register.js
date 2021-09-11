@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, Fragment } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -14,7 +15,7 @@ import Navbar from "../components/Navbar";
 const Register = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { register, errors, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm();
   const { isFetching, isSuccess, isError, errorMessage } =
     useSelector(authSelector);
   const onSubmit = (data) => {
