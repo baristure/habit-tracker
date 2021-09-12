@@ -1,40 +1,40 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
-import authApi from "../../api/auth";
+import authApi from "../../common/api/auth";
 
 export const loginUser = createAsyncThunk(
   "users/login",
-  async ({ username, password }, thunkAPI) => {
+  async ({ username, password }, { rejectWithValue }) => {
     try {
       const response = await authApi.login(username, password);
       let data = response.data;
 
-      if (response.status === 200) {
+      if (response.status === 200 && data.isAuthenticated) {
         let resDataStr = JSON.stringify(data);
         Cookies.set("auth-jwt", resDataStr);
         return { ...data };
       } else {
-        return thunkAPI.rejectWithValue(data);
+        return rejectWithValue(data);
       }
     } catch (e) {
-      return thunkAPI.rejectWithValue(e.response.message);
+      return rejectWithValue(e.response.message);
     }
   }
 );
 
 export const registerUser = createAsyncThunk(
   "users/register",
-  async ({ email, username, password }, thunkAPI) => {
+  async ({ email, username, password }, { rejectWithValue }) => {
     try {
       const response = await authApi.register(email, username, password);
       let data = response.data;
       if (response.status === 201) {
         return { ...data };
       } else {
-        return thunkAPI.rejectWithValue(data);
+        return rejectWithValue(data);
       }
     } catch (e) {
-      return thunkAPI.rejectWithValue(e.response.message);
+      return rejectWithValue(e.response.message);
     }
   }
 );
@@ -99,4 +99,4 @@ export const { clearState } = authSlice.actions;
 
 export const authSelector = (state) => state.auth;
 
-export default authSlice.reducer;
+export const authReducer = authSlice.reducer;

@@ -5,18 +5,22 @@ import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 
-import { authSelector, clearState, loginUser } from "../store/slices/authSlice";
+import {
+  authSelector,
+  clearState,
+  registerUser,
+} from "../../store/slices/authSlice";
 import Navbar from "../components/Navbar";
-const Login = () => {
+
+const Register = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { register, handleSubmit } = useForm();
   const { isFetching, isSuccess, isError, errorMessage } =
     useSelector(authSelector);
   const onSubmit = (data) => {
-    dispatch(loginUser(data));
+    dispatch(registerUser(data));
   };
-
   useEffect(() => {
     return () => {
       dispatch(clearState());
@@ -29,32 +33,54 @@ const Login = () => {
     }
 
     if (isSuccess) {
+      toast.success(
+        "Account created successfully. Please login to your account."
+      );
       dispatch(clearState());
-      toast.success("You Have Successfully Logged in. Redirecting to homepage");
       setTimeout(() => {
-        history.push("/");
+        history.push("/sign-in");
       }, 2000);
     }
   }, [isError, isSuccess]);
 
   return (
     <>
-      <Navbar />
       <Toaster />
+      <Navbar />
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center  sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <h1 className=" text-center text-3xl font-extrabold text-gray-900">
-            Sign into your account
+            Sign up for your account
           </h1>
         </div>
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
             <form
-              data-testid="login-form"
               className="space-y-6"
               onSubmit={handleSubmit(onSubmit)}
               method="POST"
             >
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email
+                </label>
+                <div className="mt-1">
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    {...register("email", {
+                      pattern: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/i,
+                    })}
+                    required
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+              </div>
               <div>
                 <label
                   htmlFor="username"
@@ -122,7 +148,7 @@ const Login = () => {
                       ></path>
                     </svg>
                   ) : null}
-                  Sign in
+                  Sign up
                 </button>
               </div>
             </form>
@@ -130,7 +156,7 @@ const Login = () => {
               <div className="relative">
                 <div className="relative flex justify-center text-sm">
                   <span className="px-2 bg-white text-gray-500">
-                    Or <Link to="register"> Signup</Link>
+                    Or <Link to="sign-in"> Sign In</Link>
                   </span>
                 </div>
               </div>
@@ -141,4 +167,5 @@ const Login = () => {
     </>
   );
 };
-export default Login;
+
+export default Register;

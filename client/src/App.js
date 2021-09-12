@@ -1,9 +1,9 @@
 import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
-import { PrivateRoute } from "./helpers/PrivateRoute";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Home from "./pages/Home";
+import { PrivateRoute } from "./common/helpers/PrivateRoute";
+import Login from "./features/pages/Login";
+import Register from "./features/pages/Register";
+import Home from "./features/pages/Home";
 
 function App() {
   return (
