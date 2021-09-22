@@ -1,36 +1,41 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
 
-import { render, fireEvent, screen } from "../../common/helpers/test-utils";
-import Login from "../../features/pages/Login";
+import { render, fireEvent, screen } from "../../common/helpers/renderWrapper";
+import Register from "../../features/pages/Register";
 
-describe("Login", () => {
-  describe("should render the basic fields", () => {
-    it("should render the basic fields", () => {
-      render(<Login />);
-      expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
-      expect(screen.getByLabelText("Username")).toBeInTheDocument();
-      expect(screen.getByLabelText("Password")).toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: /Login/i })
-      ).toBeInTheDocument();
-    });
+describe("Register", () => {
+  it("should render the basic fields", () => {
+    render(<Register />);
+    expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
+    expect(screen.getByLabelText("Email")).toBeInTheDocument();
+    expect(screen.getByLabelText("Username")).toBeInTheDocument();
+    expect(screen.getByLabelText("Password")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Register/i })
+    ).toBeInTheDocument();
   });
+
   describe("with valid inputs", () => {
-    test("should calls the onSubmit function", async () => {
+    it("Should register with valid inputs", async () => {
       // Arrange
       const mockOnSubmit = jest.fn();
       const { getByLabelText, getByTestId } = render(
-        <Login testSubmit={mockOnSubmit} />
+        <Register testSubmit={mockOnSubmit} />
       );
+
       // Act
       await act(async () => {
-        fireEvent.change(getByLabelText("Username"), {
-          target: { value: "baristure" },
+        const emailInput = getByLabelText("Email");
+        fireEvent.change(emailInput, {
+          target: { value: "baristure@hotmail.com" },
         });
-        fireEvent.change(getByLabelText("Password"), {
-          target: { value: "1234567" },
-        });
+
+        const userNameInput = getByLabelText("Username");
+        fireEvent.change(userNameInput, { target: { value: "baristure" } });
+
+        const passwordInput = getByLabelText("Password");
+        fireEvent.change(passwordInput, { target: { value: "1234567" } });
       });
       await act(async () => {
         fireEvent.click(getByTestId("form-submit-button"));
@@ -41,19 +46,49 @@ describe("Login", () => {
     });
   });
 
-  describe("With invalid inputs", () => {
-    test("should render username required error", async () => {
+  describe("with invalid inputs", () => {
+    it("should render email required error", async () => {
       // Arrange
       const mockOnSubmit = jest.fn();
       const { getByLabelText, getByTestId, container } = render(
-        <Login testSubmit={mockOnSubmit} />
+        <Register testSubmit={mockOnSubmit} />
+      );
+      // Act
+      await act(async () => {
+        const emailInput = getByLabelText("Email");
+        fireEvent.change(emailInput, { target: { value: "" } });
+        fireEvent.blur(emailInput);
+        fireEvent.click(getByTestId("form-submit-button"));
+      });
+      // Assert
+      expect(container.innerHTML).toMatch("Email can not be blank");
+    });
+    it("should render email input invalid email error", async () => {
+      // Arrange
+      const mockOnSubmit = jest.fn();
+      const { getByLabelText, getByTestId, container } = render(
+        <Register testSubmit={mockOnSubmit} />
+      );
+      // Act
+      await act(async () => {
+        const emailInput = getByLabelText("Email");
+        fireEvent.change(emailInput, { target: { value: "aaaa" } });
+        fireEvent.blur(emailInput);
+        fireEvent.click(getByTestId("form-submit-button"));
+      });
+      // Assert
+      expect(container.innerHTML).toMatch("Enter a valid email address");
+    });
+    it("should render username required error", async () => {
+      // Arrange
+      const mockOnSubmit = jest.fn();
+      const { getByLabelText, getByTestId, container } = render(
+        <Register testSubmit={mockOnSubmit} />
       );
       // Act
       await act(async () => {
         const usernameInput = getByLabelText("Username");
-
         fireEvent.change(usernameInput, { target: { value: "" } });
-
         fireEvent.blur(usernameInput);
         fireEvent.click(getByTestId("form-submit-button"));
       });
@@ -64,7 +99,7 @@ describe("Login", () => {
       // Arrange
       const mockOnSubmit = jest.fn();
       const { getByLabelText, getByTestId, container } = render(
-        <Login testSubmit={mockOnSubmit} />
+        <Register testSubmit={mockOnSubmit} />
       );
       // Act
       await act(async () => {
@@ -84,7 +119,7 @@ describe("Login", () => {
       // Arrange
       const mockOnSubmit = jest.fn();
       const { getByLabelText, getByTestId, container } = render(
-        <Login testSubmit={mockOnSubmit} />
+        <Register testSubmit={mockOnSubmit} />
       );
       // Act
       await act(async () => {
@@ -107,7 +142,7 @@ describe("Login", () => {
       // Arrange
       const mockOnSubmit = jest.fn();
       const { getByLabelText, getByTestId, container } = render(
-        <Login testSubmit={mockOnSubmit} />
+        <Register testSubmit={mockOnSubmit} />
       );
       // Act
       await act(async () => {

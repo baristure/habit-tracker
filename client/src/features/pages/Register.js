@@ -12,14 +12,22 @@ import {
 } from "../../store/slices/authSlice";
 import Navbar from "../components/Navbar";
 
-const Register = () => {
+const Register = ({ testSubmit }) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
   const { isFetching, isSuccess, isError, errorMessage } =
     useSelector(authSelector);
   const onSubmit = (data) => {
-    dispatch(registerUser(data));
+    if (testSubmit) {
+      testSubmit();
+    } else {
+      dispatch(registerUser(data));
+    }
   };
   useEffect(() => {
     return () => {
@@ -75,10 +83,14 @@ const Register = () => {
                     autoComplete="email"
                     {...register("email", {
                       pattern: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/i,
+                      required: true,
                     })}
-                    required
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
+                  {errors.email?.type === "required" &&
+                    "Email can not be blank"}
+                  {errors.email?.type === "pattern" &&
+                    "Enter a valid email address"}
                 </div>
               </div>
               <div>
@@ -94,10 +106,20 @@ const Register = () => {
                     name="username"
                     type="username"
                     autoComplete="username"
-                    {...register("username")}
+                    {...register("username", {
+                      required: true,
+                      minLength: 4,
+                      maxLength: 20,
+                    })}
                     required
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
+                  {errors.username?.type === "required" &&
+                    "Username can not be blank"}
+                  {errors.username?.type === "minLength" &&
+                    "Username should longer than 4 characters"}
+                  {errors.username?.type === "maxLength" &&
+                    "Username is no more than 20 characters"}
                 </div>
               </div>
 
@@ -113,16 +135,18 @@ const Register = () => {
                     id="password"
                     name="password"
                     type="password"
-                    {...register("password")}
+                    {...register("password", { required: true })}
                     autoComplete="current-password"
-                    required
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
+                  {errors.password?.type === "required" &&
+                    "Password can not be blank"}
                 </div>
               </div>
 
               <div>
                 <button
+                  data-testid="form-submit-button"
                   type="submit"
                   className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
@@ -148,7 +172,7 @@ const Register = () => {
                       ></path>
                     </svg>
                   ) : null}
-                  Sign up
+                  Register
                 </button>
               </div>
             </form>
@@ -156,7 +180,7 @@ const Register = () => {
               <div className="relative">
                 <div className="relative flex justify-center text-sm">
                   <span className="px-2 bg-white text-gray-500">
-                    Or <Link to="sign-in"> Sign In</Link>
+                    Or <Link to="sign-in"> Login</Link>
                   </span>
                 </div>
               </div>
