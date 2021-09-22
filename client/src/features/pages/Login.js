@@ -24,9 +24,9 @@ const Login = ({ testSubmit }) => {
   const onSubmit = (data) => {
     if (testSubmit) {
       testSubmit();
+    } else {
+      dispatch(loginUser(data));
     }
-    console.log("bastı");
-    dispatch(loginUser(data));
   };
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const Login = ({ testSubmit }) => {
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center  sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <h1 className=" text-center text-3xl font-extrabold text-gray-900">
-            Sign into your account
+            Login into your account
           </h1>
         </div>
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -80,11 +80,19 @@ const Login = ({ testSubmit }) => {
                     name="username"
                     type="username"
                     autoComplete="username"
-                    {...register("username", { required: true })}
+                    {...register("username", {
+                      required: true,
+                      minLength: 4,
+                      maxLength: 20,
+                    })}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                   {errors.username?.type === "required" &&
                     "Username is required"}
+                  {errors.username?.type === "minLength" &&
+                    "Username should longer than 3 characters"}
+                  {errors.username?.type === "maxLength" &&
+                    "Username is no more than 20 characters"}
                 </div>
               </div>
 
@@ -137,7 +145,7 @@ const Login = ({ testSubmit }) => {
                       ></path>
                     </svg>
                   ) : null}
-                  Sign in
+                  Login
                 </button>
               </div>
             </form>
@@ -145,7 +153,7 @@ const Login = ({ testSubmit }) => {
               <div className="relative">
                 <div className="relative flex justify-center text-sm">
                   <span className="px-2 bg-white text-gray-500">
-                    Or <Link to="register"> Signup</Link>
+                    Or <Link to="register"> Register</Link>
                   </span>
                 </div>
               </div>

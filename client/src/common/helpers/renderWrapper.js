@@ -5,8 +5,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 
 // Import your own reducer
-import { authSlice } from "../store/slices/authSlice";
-
+import { authSlice } from "../../store/slices/authSlice";
+import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
 function render(
   ui,
   {
@@ -19,7 +19,11 @@ function render(
   } = {}
 ) {
   function Wrapper({ children }) {
-    return <Provider store={store}>{children}</Provider>;
+    return (
+      <Provider store={store}>
+        <Router>{children}</Router>
+      </Provider>
+    );
   }
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
 }
