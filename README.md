@@ -1,1 +1,1 @@
-# mern-authentication
+# Habit tracker app with MERN Stack
