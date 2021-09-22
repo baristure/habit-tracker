@@ -1,7 +1,7 @@
 {
-  "name": "mern-authentication",
+  "name": "habit-tracker",
   "version": "1.0.0",
-  "description": "",
+  "description": "Personal Habit Tracker App",
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon --exec babel-node src/index.js",
@@ -12,15 +12,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/baristure/mern-authentication.git"
+    "url": "git+https://github.com/baristure/habit-tracker.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["node.js","react","redux-toolkit","mongodb","javascript"],
+  "author": "Baris Ture",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/baristure/mern-authentication/issues"
+    "url": "https://github.com/baristure/habit-tracker/issues"
   },
-  "homepage": "https://github.com/baristure/mern-authentication#readme",
+  "homepage": "https://github.com/baristure/habit-tracker#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
