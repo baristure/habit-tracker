@@ -12,6 +12,6 @@ module.exports = {
     "client",
   ],
   testPathIgnorePatterns: ["./client/"],
-
+  testTimeout: 30000,
   coverageReporters: ["text", "lcov", "clover", "html"],
 };

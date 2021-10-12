@@ -5,68 +5,65 @@ import { expect, it } from "@jest/globals";
 setupTestDB();
 
 describe("User model tests", () => {
-  describe("User validation", () => {
-    let newUser;
+  let newUser;
+  beforeEach(() => {
+    newUser = {
+      email: faker.internet.email().toLowerCase(),
+      username: faker.name.findName(),
+      password: "1234567a",
+    };
+  });
 
-    beforeEach(() => {
-      newUser = {
-        email: faker.internet.email().toLowerCase(),
-        username: faker.name.findName(),
-        password: "1234567a",
-      };
-    });
+  it("Should correctly create a user", async () => {
+    let error = null;
+    let user = null;
+    try {
+      user = await User.create(newUser);
+    } catch (e) {
+      error = e;
+    }
 
-    it("Should correctly create a user", async () => {
-      let error = null;
-      let user = null;
-      try {
-        user = await User.create(newUser);
-      } catch (e) {
-        error = e;
-      }
+    expect(user.email).toEqual(newUser.email);
+    expect(user.username).toEqual(newUser.username);
+    expect(error).toBeNull();
+  });
 
-      expect(user.email).toEqual(newUser.email);
-      expect(user.username).toEqual(newUser.username);
-      expect(error).toBeNull();
-    });
+  it("Should not validate user without valid email", async () => {
+    let error = null;
+    newUser.email = "asdasd";
 
-    it("Should not validate user without valid email", async () => {
-      let error = null;
-      newUser.email = "asdasd";
+    try {
+      const user = new User(newUser);
+      await user.validate();
+    } catch (e) {
+      error = e;
+    }
+    expect(error).not.toBeNull();
+  });
 
-      try {
-        const user = new User(newUser);
-        await user.validate();
-      } catch (e) {
-        error = e;
-      }
-      expect(error).not.toBeNull();
-    });
+  it("Should not validate user without username", async () => {
+    let error = null;
+    newUser.username = "";
 
-    it("Should not validate user without username", async () => {
-      let error = null;
-      newUser.username = "";
+    try {
+      const user = new User(newUser);
+      await user.validate();
+    } catch (e) {
+      error = e;
+    }
+    expect(error).not.toBeNull();
+  });
 
-      try {
-        const user = new User(newUser);
-        await user.validate();
-      } catch (e) {
-        error = e;
-      }
-      expect(error).not.toBeNull();
-    });
+  it("Should not validate user without password", async () => {
+    let error = null;
+    newUser.password = "";
 
-    it("Should not validate user without password", async () => {
-      let error = null;
-      newUser.password = "";
-
-      try {
-        const user = new User(newUser);
-        await user.validate();
-      } catch (e) {
-        error = e;
-      }
-      expect(error).not.toBeNull();
-    });
+    try {
+      const user = new User(newUser);
+      await user.validate();
+    } catch (e) {
+      error = e;
+    }
+    expect(error).not.toBeNull();
   });
 });
