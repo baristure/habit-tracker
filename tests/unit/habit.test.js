@@ -12,6 +12,7 @@ describe("Habit model test", () => {
     newHabit = {
       email: faker.internet.email().toLowerCase(),
       content: faker.random.word(),
+      index: 0,
       dates: [
         {
           date: "2021-10-10",
@@ -29,16 +30,17 @@ describe("Habit model test", () => {
       status: true,
     };
   });
+
   it("Should correctly create a new habit", async () => {
     let error = null;
-    let habit = null;
     try {
-      habit = await Habit.create(newHabit);
+      const habit = await Habit.create(newHabit);
       expect(habit.email).toEqual(newHabit.email);
       expect(habit.content).toEqual(newHabit.content);
       habit.dates.forEach((date, index) => {
         expect(date).toMatchObject(newHabit.dates[index]);
       });
+      expect(habit.index).toEqual(newHabit.index);
       expect(habit.dates).toEqual(newHabit.dates);
       expect(habit.status).toEqual(newHabit.status);
       expect(error).toBeNull();
@@ -70,18 +72,15 @@ describe("Habit model test", () => {
     }
     expect(error).not.toBeNull();
   });
-  it("Should be create a habit default status false", async () => {
+  it("Should be create a habit default status true", async () => {
     let error = null;
     let habit = null;
     newHabit.status = null;
     try {
       habit = await Habit.create(newHabit);
-
-      console.log(habit);
-      expect(habit.status).toEqual(false);
+      expect(habit.status).toEqual(true);
       expect(error).toBeNull();
     } catch (e) {
-      console.log(e);
       error = e;
     }
   });

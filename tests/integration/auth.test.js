@@ -79,10 +79,6 @@ describe("Auth routes", () => {
         .send(userOne)
         .expect(httpStatus.OK);
 
-      expect(res.header["set-cookie"][0].split(";")[0]).toEqual(
-        `jwt=${userOneAccessToken}`
-      );
-
       expect(res.body).toBeDefined();
       expect(res.body).toMatchObject({
         isAuthenticated: true,
@@ -140,7 +136,6 @@ describe("Auth routes", () => {
         .post("/api/auth/logout")
         .send()
         .expect(httpStatus.NO_CONTENT);
-      expect(res.header["set-cookie"][0].split(";")[0]).toEqual("jwt=");
       expect(res.body).toBeDefined();
       expect(res.body).toMatchObject({});
     });

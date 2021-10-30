@@ -18,10 +18,6 @@ describe("User routes", () => {
       const userOneAccessToken = generateToken(userOne._id);
       const res = await request(app)
         .get(`/api/users/${userOne._id}`)
-        .set("Cookie", `jwt=${userOneAccessToken}`, {
-          httpOnly: true,
-          maxAge: config.jwt.accessExpirationMinutes * 60 * 1000,
-        })
         .set("Authorization", `Bearer ${userOneAccessToken}`)
         .send()
         .expect(httpStatus.OK);
@@ -39,10 +35,6 @@ describe("User routes", () => {
       const userOneAccessToken = generateToken(userOne._id);
       await request(app)
         .get(`/api/users/${userOne._id}`)
-        .set("Cookie", `jwt=${userOneAccessToken}`, {
-          httpOnly: true,
-          maxAge: config.jwt.accessExpirationMinutes * 60 * 1000,
-        })
         .send()
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -52,10 +44,6 @@ describe("User routes", () => {
       const userOneAccessToken = generateToken(userOne._id);
       await request(app)
         .get("/api/users/invalidId")
-        .set("Cookie", `jwt=${userOneAccessToken}`, {
-          httpOnly: true,
-          maxAge: config.jwt.accessExpirationMinutes * 60 * 1000,
-        })
         .set("Authorization", `Bearer ${userOneAccessToken}`)
         .send()
         .expect(httpStatus.BAD_REQUEST);
@@ -66,10 +54,6 @@ describe("User routes", () => {
       const userOneAccessToken = generateToken(userOne._id);
       await request(app)
         .get(`/api/users/610eddfa0e0ca7302871321b`)
-        .set("Cookie", `jwt=${userOneAccessToken}`, {
-          httpOnly: true,
-          maxAge: config.jwt.accessExpirationMinutes * 60 * 1000,
-        })
         .set("Authorization", `Bearer ${userOneAccessToken}`)
         .send()
         .expect(httpStatus.NOT_FOUND);
@@ -82,10 +66,6 @@ describe("User routes", () => {
       const userOneAccessToken = generateToken(userOne._id);
       await request(app)
         .get(`/api/users/delete/${userOne._id}`)
-        .set("Cookie", `jwt=${userOneAccessToken}`, {
-          httpOnly: true,
-          maxAge: config.jwt.accessExpirationMinutes * 60 * 1000,
-        })
         .send()
         .expect(httpStatus.UNAUTHORIZED);
     });
@@ -95,10 +75,6 @@ describe("User routes", () => {
       const userOneAccessToken = generateToken(userOne._id);
       await request(app)
         .get("/api/users/delete/invalidId")
-        .set("Cookie", `jwt=${userOneAccessToken}`, {
-          httpOnly: true,
-          maxAge: config.jwt.accessExpirationMinutes * 60 * 1000,
-        })
         .set("Authorization", `Bearer ${userOneAccessToken}`)
         .send()
         .expect(httpStatus.BAD_REQUEST);
@@ -110,10 +86,6 @@ describe("User routes", () => {
 
       await request(app)
         .get(`/api/users/delete/${userTwo._id}`)
-        .set("Cookie", `jwt=${userOneAccessToken}`, {
-          httpOnly: true,
-          maxAge: config.jwt.accessExpirationMinutes * 60 * 1000,
-        })
         .set("Authorization", `Bearer ${userOneAccessToken}`)
         .send()
         .expect(httpStatus.NOT_FOUND);
@@ -124,10 +96,6 @@ describe("User routes", () => {
 
       await request(app)
         .get(`/api/users/delete/${userOne._id}`)
-        .set("Cookie", `jwt=${userOneAccessToken}`, {
-          httpOnly: true,
-          maxAge: config.jwt.accessExpirationMinutes * 60 * 1000,
-        })
         .set("Authorization", `Bearer ${userOneAccessToken}`)
         .send()
         .expect(httpStatus.NO_CONTENT);

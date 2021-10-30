@@ -1,4 +1,3 @@
-import { boolean } from "joi";
 import mongoose from "mongoose";
 import validator from "validator";
 
@@ -19,8 +18,9 @@ const HabitSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    index: Number,
     dates: [{ date: String, complete: Boolean }],
-    status: Boolean,
+    status: { type: Boolean, default: true },
   },
   {
     toJSON: {
