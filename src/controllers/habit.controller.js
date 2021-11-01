@@ -10,6 +10,22 @@ const create = catchAsync(async (req, res) => {
   res.send(habit);
 });
 
+const updateIndex = catchAsync(async (req, res) => {
+  const { habitId, index } = req.body;
+  if (!index)
+    throw new ApiError(
+      httpStatus.NOT_FOUND,
+      "Request body index property can not be null"
+    );
+  if (!habitId)
+    throw new ApiError(
+      httpStatus.NOT_FOUND,
+      "Request body habitId can not be null"
+    );
+  const habit = await habitService.updateIndex(habitId, index);
+  res.send(habit);
+});
+
 const mark = catchAsync(async (req, res) => {
   const { dateObj, habitId } = req.body;
   if (!dateObj)
@@ -52,6 +68,7 @@ const deleteAll = catchAsync(async (req, res) => {
 
 module.exports = {
   create,
+  updateIndex,
   mark,
   getOne,
   getAll,

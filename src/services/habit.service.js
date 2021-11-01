@@ -47,6 +47,22 @@ const getHabitsByEmail = async (email) => {
 };
 
 /**
+ * Update habit index value
+ * @param {ObjectId} id
+ * @param {dateObj} index
+ * @returns {Promise<Habit>}
+ */
+const updateIndex = async (habitId, index) => {
+  const habit = await gethabitById(habitId);
+  if (!habit) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Habit can not found");
+  }
+  habit.index = index;
+  await habit.save();
+  return habit;
+};
+
+/**
  * Mark habit as done or not done
  * @param {ObjectId} id
  * @param {dateObj} date
@@ -101,6 +117,7 @@ module.exports = {
   gethabitById,
   getHabitsByEmail,
   markHabit,
+  updateIndex,
   deleteOne,
   deleteAll,
 };
