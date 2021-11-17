@@ -1,7 +1,9 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 export default function Navbar({ fixed }) {
   const [navbarOpen, setNavbarOpen] = React.useState(false);
+  const auth = useSelector((state) => state.auth);
   return (
     <>
       <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-indigo-600 ">
@@ -28,24 +30,45 @@ export default function Navbar({ fixed }) {
             }
             id="example-navbar-danger"
           >
-            <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
-              <li className="nav-item">
-                <a
-                  className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-white hover:opacity-75"
-                  href="/sign-in"
-                >
-                  <span className="ml-2">Sign In</span>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-white hover:opacity-75"
-                  href="/sign-up"
-                >
-                  <span className="ml-2">Sign Up</span>
-                </a>
-              </li>
-            </ul>
+            {auth.username ? (
+              <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
+                <li className="nav-item">
+                  <a
+                    className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-white hover:opacity-75"
+                    href="#"
+                  >
+                    <span className="ml-2">{auth.username}</span>
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a
+                    className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-white hover:opacity-75"
+                    href="/logout"
+                  >
+                    <span className="ml-2">Logout</span>
+                  </a>
+                </li>
+              </ul>
+            ) : (
+              <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
+                <li className="nav-item">
+                  <a
+                    className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-white hover:opacity-75"
+                    href="/sign-in"
+                  >
+                    <span className="ml-2">Sign In</span>
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a
+                    className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-white hover:opacity-75"
+                    href="/sign-up"
+                  >
+                    <span className="ml-2">Sign Up</span>
+                  </a>
+                </li>
+              </ul>
+            )}
           </div>
         </div>
       </nav>

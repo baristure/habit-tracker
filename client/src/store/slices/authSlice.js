@@ -59,6 +59,15 @@ export const authSlice = createSlice({
       state.isAuthenticated = null;
       return state;
     },
+    refreshUserFromCookie: (state) => {
+      const userCookie = Cookies.get("auth-jwt");
+      const userJson = JSON.parse(userCookie);
+      state.email = userJson.user.email;
+      state.username = userJson.user.username;
+      state.id = userJson.user.id;
+      state.isFetching = false;
+      state.isSuccess = true;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(registerUser.fulfilled, (state, { payload }) => {
@@ -95,7 +104,7 @@ export const authSlice = createSlice({
     });
   },
 });
-export const { clearState } = authSlice.actions;
+export const { clearState, refreshUserFromCookie } = authSlice.actions;
 
 export const authSelector = (state) => state.auth;
 

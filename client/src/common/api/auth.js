@@ -1,9 +1,9 @@
 import axios from "axios";
-
+import { apiBaseUrl } from "./apiconfig";
 const authApi = {
   login: async (username, password) => {
     const response = await axios
-      .post("http://localhost:4000/api/auth/login", { username, password })
+      .post(`${apiBaseUrl}auth/login`, { username, password })
       .then((res) => {
         return res;
       })
@@ -14,7 +14,7 @@ const authApi = {
   },
   register: async (email, username, password) => {
     const response = await axios
-      .post("http://localhost:4000/api/auth/register", {
+      .post(`${apiBaseUrl}auth/register`, {
         email,
         username,
         password,
