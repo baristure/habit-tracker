@@ -28,11 +28,7 @@ const login = catchAsync(async (req, res) => {
     password
   );
   const token = generateToken(user.id);
-  res.cookie("jwt", token, {
-    httpOnly: true,
-    maxAge: config.jwt.accessExpirationMinutes * 60 * 1000,
-  });
-  let response = {
+  const response = {
     isAuthenticated: true,
     user,
     token,
@@ -41,7 +37,6 @@ const login = catchAsync(async (req, res) => {
 });
 
 const logout = catchAsync(async (req, res) => {
-  res.cookie("jwt", "", { maxAge: 1 });
   let response = { user: { email: "", username: "" }, success: true };
   res.status(httpStatus.NO_CONTENT).send(response);
 });

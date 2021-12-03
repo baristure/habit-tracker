@@ -62,7 +62,6 @@ describe("Auth routes", () => {
 
     test("Should return 400 if password is null", async () => {
       newUser.password = null;
-
       await request(app)
         .post("/api/auth/register")
         .send(newUser)
@@ -74,11 +73,7 @@ describe("Auth routes", () => {
     test("should return 200 and successfully user and token information", async () => {
       insertUsers([userOne]);
       const userOneAccessToken = generateToken(userOne._id);
-      const res = await request(app)
-        .post("/api/auth/login")
-        .send(userOne)
-        .expect(httpStatus.OK);
-
+      const res = await request(app).post("/api/auth/login").send(userOne);
       expect(res.body).toBeDefined();
       expect(res.body).toMatchObject({
         isAuthenticated: true,

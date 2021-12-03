@@ -1,4 +1,5 @@
 import httpStatus from "http-status";
+import { ObjectId } from "mongodb";
 
 import { Habit } from "../models";
 import ApiError from "../utils/ApiError";
@@ -9,7 +10,10 @@ import ApiError from "../utils/ApiError";
  * @returns {Promise<Habit>}
  */
 const createHabit = async (habitBody) => {
-  if (await isHave(habitBody).length) {
+  if (!ObjectId.isValid(habitBody.userId))
+    throw new ApiError(httpStatus.BAD_REQUEST, "The userId is not valid");
+  const checkHabit = await isHave(habitBody);
+  if (checkHabit.length) {
     throw new ApiError(
       httpStatus.BAD_REQUEST,
       "The user already have this habit."
@@ -28,38 +32,23 @@ const gethabitById = async (id) => {
 };
 
 /**
- * Get habit by email and content
- * @param {email} userEmail
+ * Get habit by userId and content
+ * @param {userId} userId
  * @param {content} content
  * @returns {Promise<[Habits]>}
  */
-const isHave = async ({ email, content }) => {
-  return Habit.find({ email, content });
+const isHave = async ({ userId, content }) => {
+  let habit = Habit.find({ userId, content });
+  return habit;
 };
 
 /**
- * Get habit by email
- * @param {Email} email
+ * Get habit by userId
+ * @param {UserId} userId
  * @returns {Promise<Habits>}
  */
-const getHabitsByEmail = async (email) => {
-  return Habit.find({ email });
-};
-
-/**
- * Update habit index value
- * @param {ObjectId} id
- * @param {dateObj} index
- * @returns {Promise<Habit>}
- */
-const updateIndex = async (habitId, index) => {
-  const habit = await gethabitById(habitId);
-  if (!habit) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Habit can not found");
-  }
-  habit.index = index;
-  await habit.save();
-  return habit;
+const getHabitsByUserId = async (userId) => {
+  return Habit.find({ userId });
 };
 
 /**
@@ -99,25 +88,24 @@ const deleteOne = async (habitId) => {
   return true;
 };
 /**
- * Delete users all habits by email
- * @param {Email} email
+ * Delete users all habits by userId
+ * @param {UserId} userId
  * @returns {Promise<Boolean>}
  */
-const deleteAll = async (email) => {
-  const habits = await getHabitsByEmail(email);
+const deleteAll = async (userId) => {
+  const habits = await getHabitsByUserId(userId);
   if (!habits) {
     throw new ApiError(httpStatus.NOT_FOUND, "Habits can not found");
   }
-  await Habit.deleteMany({ email });
+  await Habit.deleteMany({ userId });
   return true;
 };
 
 module.exports = {
   createHabit,
   gethabitById,
-  getHabitsByEmail,
+  getHabitsByUserId,
   markHabit,
-  updateIndex,
   deleteOne,
   deleteAll,
 };

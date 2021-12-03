@@ -1,10 +1,8 @@
 import request from "supertest";
-import faker from "faker";
 import httpStatus from "http-status";
 
 import config from "../../src/config/config";
 import app from "../../src/app";
-import { User } from "../../src/models";
 import setupTestDB from "../utils/setupTestDB";
 import { insertUsers, userOne, userTwo } from "../utils/InsertUsers";
 import generateToken from "../../src/utils/GenerateToken";
@@ -32,7 +30,6 @@ describe("User routes", () => {
 
     test("Should return 401 error if access token is missing", async () => {
       await insertUsers([userOne]);
-      const userOneAccessToken = generateToken(userOne._id);
       await request(app)
         .get(`/api/users/${userOne._id}`)
         .send()
@@ -63,7 +60,6 @@ describe("User routes", () => {
   describe("DELETE /users/:userId", () => {
     test("Should return 401 error if access token is missing", async () => {
       await insertUsers([userOne]);
-      const userOneAccessToken = generateToken(userOne._id);
       await request(app)
         .get(`/api/users/delete/${userOne._id}`)
         .send()

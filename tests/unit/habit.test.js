@@ -10,9 +10,8 @@ describe("Habit model test", () => {
   beforeEach(() => {
     jest.setTimeout(10000);
     newHabit = {
-      email: faker.internet.email().toLowerCase(),
+      userId: require("mongoose").Types.ObjectId(),
       content: faker.random.word(),
-      index: 0,
       dates: [
         {
           date: "2021-10-10",
@@ -35,12 +34,11 @@ describe("Habit model test", () => {
     let error = null;
     try {
       const habit = await Habit.create(newHabit);
-      expect(habit.email).toEqual(newHabit.email);
+      expect(habit.userId).toEqual(newHabit.userId);
       expect(habit.content).toEqual(newHabit.content);
       habit.dates.forEach((date, index) => {
         expect(date).toMatchObject(newHabit.dates[index]);
       });
-      expect(habit.index).toEqual(newHabit.index);
       expect(habit.dates).toEqual(newHabit.dates);
       expect(habit.status).toEqual(newHabit.status);
       expect(error).toBeNull();
@@ -48,10 +46,9 @@ describe("Habit model test", () => {
       error = e;
     }
   });
-  it("Should not validate a habit without valid email", async () => {
+  it("Should not validate a habit without valid userId", async () => {
     let error = null;
-    newHabit.email = "asdasd";
-
+    newHabit.userId = "1112asd";
     try {
       const habit = new Habit(newHabit);
       await habit.validate();
@@ -72,7 +69,7 @@ describe("Habit model test", () => {
     }
     expect(error).not.toBeNull();
   });
-  it("Should be create a habit default status true", async () => {
+  it("Should be create a habit default status equal to true", async () => {
     let error = null;
     let habit = null;
     newHabit.status = null;

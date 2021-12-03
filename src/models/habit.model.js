@@ -3,22 +3,14 @@ import validator from "validator";
 
 const HabitSchema = new mongoose.Schema(
   {
-    email: {
-      type: String,
+    userId: {
+      type: mongoose.SchemaTypes.ObjectId,
       required: true,
-      trim: true,
-      lowercase: true,
-      validate(value) {
-        if (!validator.isEmail(value)) {
-          throw new Error("Invalid email");
-        }
-      },
     },
     content: {
       type: String,
       required: true,
     },
-    index: Number,
     dates: [{ date: String, complete: Boolean }],
     status: { type: Boolean, default: true },
   },
