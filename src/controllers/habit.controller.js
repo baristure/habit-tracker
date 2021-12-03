@@ -44,7 +44,7 @@ const getAll = catchAsync(async (req, res) => {
       httpStatus.NOT_FOUND,
       "Request params userId can not be null"
     );
-  const habits = await habitService.getHabitByUserId(params);
+  const habits = await habitService.getHabitsByUserId(userId);
   res.send(habits);
 });
 
