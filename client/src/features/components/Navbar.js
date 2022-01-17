@@ -1,9 +1,14 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { useAuth } from "../../hooks/useAuth";
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../store/slices/authSlice";
 export default function Navbar({ fixed }) {
-  const [navbarOpen, setNavbarOpen] = React.useState(false);
+  const [navbarOpen, setNavbarOpen] = useState(false);
   const authState = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
+  const setLogout = () => {
+    dispatch(logout());
+  };
   return (
     <>
       <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-indigo-600 ">
@@ -30,20 +35,20 @@ export default function Navbar({ fixed }) {
             }
             id="example-navbar-danger"
           >
-            {authState.username ? (
+            {authState?.username ? (
               <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
                 <li className="nav-item">
                   <span className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-white hover:opacity-75">
-                    <span className="ml-2">{authState.username}</span>
+                    <span className="ml-2">{authState?.username}</span>
                   </span>
                 </li>
                 <li className="nav-item">
-                  <a
+                  <button
                     className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-white hover:opacity-75"
-                    href="/logout"
+                    onClick={() => setLogout()}
                   >
                     <span className="ml-2">Logout</span>
-                  </a>
+                  </button>
                 </li>
               </ul>
             ) : (

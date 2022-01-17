@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
-import { useHistory, Link, Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
@@ -15,10 +15,9 @@ import Navbar from "../components/Navbar";
 const Login = ({ testSubmit }) => {
   const auth = useAuth();
   const dispatch = useDispatch();
-  if (!auth) {
-    console.log("useAuth false geldi");
-    dispatch(clearState());
-  }
+  // if (!auth) {
+  //   dispatch(clearState());
+  // }
   const {
     register,
     formState: { errors },
@@ -26,6 +25,7 @@ const Login = ({ testSubmit }) => {
   } = useForm();
   const { isFetching, isSuccess, isError, errorMessage } =
     useSelector(authSelector);
+
   const onSubmit = (data) => {
     if (testSubmit) {
       testSubmit();
@@ -35,9 +35,7 @@ const Login = ({ testSubmit }) => {
   };
 
   useEffect(() => {
-    return () => {
-      if (!auth) dispatch(clearState());
-    };
+    if (!auth) dispatch(clearState());
   }, []);
 
   useEffect(() => {
@@ -51,6 +49,7 @@ const Login = ({ testSubmit }) => {
       }, 2000);
     }
   }, [isError, isSuccess]);
+
   if (auth) {
     return <Redirect to="/" />;
   } else {

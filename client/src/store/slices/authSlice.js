@@ -8,11 +8,10 @@ export const loginUser = createAsyncThunk(
     try {
       const response = await authApi.login(username, password);
       let data = response.data;
-      console.log({ data });
+      // console.log({ data });
       if (response.status === 200 && data.isAuthenticated) {
         let resDataStr = JSON.stringify(data);
         Cookies.set("auth-jwt", resDataStr);
-        console.log("response");
         return { ...data };
       } else {
         return rejectWithValue(data);
@@ -29,7 +28,7 @@ export const registerUser = createAsyncThunk(
     try {
       const response = await authApi.register(email, username, password);
       let data = response.data;
-      console.log({ data });
+      // console.log({ data });
       if (response.status === 201) {
         return { ...data };
       } else {
@@ -46,13 +45,12 @@ export const refreshUser = createAsyncThunk(
     try {
       const response = await authApi.refresh(token);
       let data = response.data;
-      console.log({ data });
+      // console.log({ data });
       if (response.status === 200 && data.isAuthenticated) {
         let resDataStr = JSON.stringify(data);
         Cookies.set("auth-jwt", resDataStr);
         return { ...data };
       } else {
-        console.log("rejectWithValue>", data);
         return rejectWithValue(data);
       }
     } catch (e) {
@@ -92,6 +90,16 @@ export const authSlice = createSlice({
       state.id = userJson.user.id;
       state.isFetching = false;
       state.isSuccess = true;
+    },
+    logout: (state) => {
+      Cookies.remove("auth-jwt");
+      state.isError = false;
+      state.email = "";
+      state.username = "";
+      state.id = "";
+      state.isSuccess = false;
+      state.isFetching = false;
+      state.isAuthenticated = null;
     },
   },
   extraReducers: (builder) => {
@@ -145,7 +153,7 @@ export const authSlice = createSlice({
     });
   },
 });
-export const { clearState, refreshUserFromCookie } = authSlice.actions;
+export const { clearState, refreshUserFromCookie, logout } = authSlice.actions;
 
 export const authSelector = (state) => state.auth;
 
