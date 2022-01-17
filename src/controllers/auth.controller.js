@@ -1,13 +1,11 @@
 import httpStatus from "http-status";
-import { sign } from "jsonwebtoken";
-import passport from "passport";
-
+import auth from "../middlewares/auth";
 import ApiError from "../utils/ApiError";
 import catchAsync from "../utils/CatchAsync";
 import passportConfig from "../config/passport";
 import config from "../config/config";
 import { userService } from "../services";
-import generateToken from "../utils/GenerateToken";
+import { generateToken, generateRefreshToken } from "../utils/GenerateToken";
 
 const register = catchAsync(async (req, res) => {
   const { email, username, password } = req.body;
@@ -28,10 +26,26 @@ const login = catchAsync(async (req, res) => {
     password
   );
   const token = generateToken(user.id);
+  const refreshtoken = generateRefreshToken(user.id);
   const response = {
     isAuthenticated: true,
     user,
     token,
+    refreshtoken,
+  };
+  res.status(httpStatus.OK).send(response);
+});
+
+const refreshUser = catchAsync(async (req, res) => {
+  const user = await auth.resolveUser(req);
+  const token = generateToken(user.id);
+  const refreshtoken = generateRefreshToken(user.id);
+
+  const response = {
+    isAuthenticated: true,
+    user,
+    token,
+    refreshtoken,
   };
   res.status(httpStatus.OK).send(response);
 });
@@ -45,4 +59,5 @@ module.exports = {
   register,
   login,
   logout,
+  refreshUser,
 };

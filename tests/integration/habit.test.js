@@ -7,7 +7,7 @@ import app from "../../src/app";
 import setupTestDB from "../utils/setupTestDB";
 import { insertUsers, userOne } from "../utils/InsertUsers";
 import { createHabit } from "../utils/CreateHabit";
-import generateToken from "../../src/utils/GenerateToken";
+import { generateToken } from "../../src/utils/GenerateToken";
 
 setupTestDB();
 describe("Habit routes ", () => {
@@ -22,7 +22,7 @@ describe("Habit routes ", () => {
   describe("POST /habit/add", () => {
     it("Should return 200 and the habit object if data is ok", async () => {
       await insertUsers([userOne]);
-      const userOneAccessToken = generateToken(userOne._id);
+      const userOneAccessToken = await generateToken(userOne._id);
       const res = await request(app)
         .post("/api/habit/add")
         .set("Authorization", `Bearer ${userOneAccessToken}`)
@@ -48,7 +48,7 @@ describe("Habit routes ", () => {
 
     it("Should return 400 if userId is null or invalid mongoId", async () => {
       await insertUsers([userOne]);
-      const userOneAccessToken = generateToken(userOne._id);
+      const userOneAccessToken = await generateToken(userOne._id);
       newHabit.userId = "";
       await request(app)
         .post(`/api/habit/add`)
@@ -59,7 +59,7 @@ describe("Habit routes ", () => {
 
     it("Should return 400 if content is null", async () => {
       await insertUsers([userOne]);
-      const userOneAccessToken = generateToken(userOne._id);
+      const userOneAccessToken = await generateToken(userOne._id);
       newHabit.content = "";
       await request(app)
         .post(`/api/habit/add`)
@@ -69,7 +69,7 @@ describe("Habit routes ", () => {
     });
     it("should return 400 user has same habit ", async () => {
       await insertUsers([userOne]);
-      const userOneAccessToken = generateToken(userOne._id);
+      const userOneAccessToken = await generateToken(userOne._id);
       const habit = await createHabit({
         userId: userOne._id,
         content: "habit content",
@@ -91,7 +91,7 @@ describe("Habit routes ", () => {
   describe("POST /habit/mark", () => {
     it("should ", async () => {
       await insertUsers([userOne]);
-      const userOneAccessToken = generateToken(userOne._id);
+      const userOneAccessToken = await generateToken(userOne._id);
       const habit = await createHabit({
         userId: userOne._id,
         content: "habit content",
@@ -119,7 +119,7 @@ describe("Habit routes ", () => {
   describe("GET /habit/get/:habitId", () => {
     it("Should return 200 if habitId is ok ", async () => {
       await insertUsers([userOne]);
-      const userOneAccessToken = generateToken(userOne._id);
+      const userOneAccessToken = await generateToken(userOne._id);
       const habit = await createHabit({
         userId: userOne._id,
         content: "habit content",
@@ -133,7 +133,7 @@ describe("Habit routes ", () => {
 
     it("Should return 400 if habitId is not sended with params", async () => {
       await insertUsers([userOne]);
-      const userOneAccessToken = generateToken(userOne._id);
+      const userOneAccessToken = await generateToken(userOne._id);
 
       await request(app)
         .get(`/api/habit/get`)
@@ -143,7 +143,7 @@ describe("Habit routes ", () => {
 
     it("Should return 400 if habitId is not valid id", async () => {
       await insertUsers([userOne]);
-      const userOneAccessToken = generateToken(userOne._id);
+      const userOneAccessToken = await generateToken(userOne._id);
 
       await request(app)
         .get(`/api/habit/get/asdasd1234`)
@@ -155,7 +155,7 @@ describe("Habit routes ", () => {
   describe("GET ALL /habit/get/all/:userId", () => {
     it("Should return 200 if userId is ok ", async () => {
       await insertUsers([userOne]);
-      const userOneAccessToken = generateToken(userOne._id);
+      const userOneAccessToken = await generateToken(userOne._id);
       const habit = await createHabit({
         userId: userOne._id,
         content: "habit content",
@@ -176,7 +176,7 @@ describe("Habit routes ", () => {
 
     it("Should return 400 if userId is not sended with params", async () => {
       await insertUsers([userOne]);
-      const userOneAccessToken = generateToken(userOne._id);
+      const userOneAccessToken = await generateToken(userOne._id);
 
       await request(app)
         .get(`/api/habit/get/all`)
@@ -186,7 +186,7 @@ describe("Habit routes ", () => {
 
     it("Should return 400 if userId is not valid id", async () => {
       await insertUsers([userOne]);
-      const userOneAccessToken = generateToken(userOne._id);
+      const userOneAccessToken = await generateToken(userOne._id);
       const habit = await createHabit({
         userId: userOne._id,
         content: "habit content",

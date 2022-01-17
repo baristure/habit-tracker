@@ -5,7 +5,7 @@ import config from "../../src/config/config";
 import app from "../../src/app";
 import setupTestDB from "../utils/setupTestDB";
 import { insertUsers, userOne, userTwo } from "../utils/InsertUsers";
-import generateToken from "../../src/utils/GenerateToken";
+import { generateToken } from "../../src/utils/GenerateToken";
 
 setupTestDB();
 

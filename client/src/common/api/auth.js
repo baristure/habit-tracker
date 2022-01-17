@@ -1,5 +1,6 @@
 import axios from "axios";
 import { apiBaseUrl } from "./apiconfig";
+
 const authApi = {
   login: async (username, password) => {
     const response = await axios
@@ -19,6 +20,26 @@ const authApi = {
         username,
         password,
       })
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err.response;
+      });
+    return response;
+  },
+  refresh: async (refreshToken) => {
+    console.log({ refreshToken });
+    const response = await axios
+      .post(
+        `${apiBaseUrl}auth/refresh-token`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${refreshToken}`,
+          },
+        }
+      )
       .then((res) => {
         return res;
       })

@@ -12,7 +12,8 @@ authRouter.post("/register", authController.register);
 
 // Login
 authRouter.post("/login", authController.login);
-
+// refreshToken
+authRouter.post("/refresh-token", auth.checkAuth(), authController.refreshUser);
 // Logout
 authRouter.post("/logout", authController.logout);
 

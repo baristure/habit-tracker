@@ -2,7 +2,7 @@ import { sign } from "jsonwebtoken";
 import config from "../config/config";
 import moment from "moment";
 
-const expires = moment().add(config.jwt.accessExpirationMinutes, "minutes");
+const expires = moment().add(config.jwt.accessExpirationDays, "days");
 const secret = config.jwt.secretKey;
 
 /**
@@ -21,4 +21,11 @@ const generateToken = (userId) => {
   return sign(payload, secret);
 };
 
-module.exports = generateToken;
+const generateRefreshToken = (userId) => {
+  const payload = {
+    sub: userId,
+  };
+  return sign(payload, secret);
+};
+
+module.exports = { generateToken, generateRefreshToken };

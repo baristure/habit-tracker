@@ -1,9 +1,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
-
+import { useAuth } from "../../hooks/useAuth";
 export default function Navbar({ fixed }) {
   const [navbarOpen, setNavbarOpen] = React.useState(false);
-  const auth = useSelector((state) => state.auth);
+  const authState = useSelector((state) => state.auth);
   return (
     <>
       <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-indigo-600 ">
@@ -30,15 +30,12 @@ export default function Navbar({ fixed }) {
             }
             id="example-navbar-danger"
           >
-            {auth.username ? (
+            {authState.username ? (
               <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
                 <li className="nav-item">
-                  <a
-                    className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-white hover:opacity-75"
-                    href="#"
-                  >
-                    <span className="ml-2">{auth.username}</span>
-                  </a>
+                  <span className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-white hover:opacity-75">
+                    <span className="ml-2">{authState.username}</span>
+                  </span>
                 </li>
                 <li className="nav-item">
                   <a

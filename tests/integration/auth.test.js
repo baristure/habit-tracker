@@ -6,7 +6,7 @@ import app from "../../src/app";
 import { User } from "../../src/models";
 import setupTestDB from "../utils/setupTestDB";
 import { insertUsers, userOne } from "../utils/InsertUsers";
-import generateToken from "../../src/utils/GenerateToken";
+import { generateToken } from "../../src/utils/GenerateToken";
 
 setupTestDB();
 
@@ -71,7 +71,7 @@ describe("Auth routes", () => {
 
   describe("POST /auth/login", () => {
     test("should return 200 and successfully user and token information", async () => {
-      insertUsers([userOne]);
+      await insertUsers([userOne]);
       const userOneAccessToken = generateToken(userOne._id);
       const res = await request(app).post("/api/auth/login").send(userOne);
       expect(res.body).toBeDefined();
@@ -86,7 +86,7 @@ describe("Auth routes", () => {
       });
     });
     test("should return 401 if username is wrong", async () => {
-      insertUsers([userOne]);
+      await insertUsers([userOne]);
       userOne.username = "wrongname";
       const res = await request(app)
         .post("/api/auth/login")
@@ -102,7 +102,7 @@ describe("Auth routes", () => {
       });
     });
     test("should return 401 if password is wrong", async () => {
-      insertUsers([userOne]);
+      await insertUsers([userOne]);
       userOne.password = "wrongpassword";
       const res = await request(app)
         .post("/api/auth/login")

@@ -8,10 +8,11 @@ export const loginUser = createAsyncThunk(
     try {
       const response = await authApi.login(username, password);
       let data = response.data;
-
+      console.log({ data });
       if (response.status === 200 && data.isAuthenticated) {
         let resDataStr = JSON.stringify(data);
         Cookies.set("auth-jwt", resDataStr);
+        console.log("response");
         return { ...data };
       } else {
         return rejectWithValue(data);
@@ -28,9 +29,30 @@ export const registerUser = createAsyncThunk(
     try {
       const response = await authApi.register(email, username, password);
       let data = response.data;
+      console.log({ data });
       if (response.status === 201) {
         return { ...data };
       } else {
+        return rejectWithValue(data);
+      }
+    } catch (e) {
+      return rejectWithValue(e.response.message);
+    }
+  }
+);
+export const refreshUser = createAsyncThunk(
+  "users/refreshtoken",
+  async ({ token }, { rejectWithValue }) => {
+    try {
+      const response = await authApi.refresh(token);
+      let data = response.data;
+      console.log({ data });
+      if (response.status === 200 && data.isAuthenticated) {
+        let resDataStr = JSON.stringify(data);
+        Cookies.set("auth-jwt", resDataStr);
+        return { ...data };
+      } else {
+        console.log("rejectWithValue>", data);
         return rejectWithValue(data);
       }
     } catch (e) {
@@ -54,6 +76,9 @@ export const authSlice = createSlice({
   reducers: {
     clearState: (state) => {
       state.isError = false;
+      state.email = "";
+      state.username = "";
+      state.id = "";
       state.isSuccess = false;
       state.isFetching = false;
       state.isAuthenticated = null;
@@ -100,6 +125,22 @@ export const authSlice = createSlice({
       state.errorMessage = payload.message;
     });
     builder.addCase(loginUser.pending, (state) => {
+      state.isFetching = true;
+    });
+    builder.addCase(refreshUser.fulfilled, (state, { payload }) => {
+      state.email = payload.user.email;
+      state.username = payload.user.username;
+      state.id = payload.user.id;
+      state.isFetching = false;
+      state.isSuccess = true;
+      return state;
+    });
+    builder.addCase(refreshUser.rejected, (state, { payload }) => {
+      state.isFetching = false;
+      state.isError = true;
+      // state.errorMessage = payload.message;
+    });
+    builder.addCase(refreshUser.pending, (state) => {
       state.isFetching = true;
     });
   },

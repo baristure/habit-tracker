@@ -1,20 +1,14 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
-import Cookies from "js-cookie";
-import { useSelector, useDispatch } from "react-redux";
+import { useAuth } from "../../hooks/useAuth";
 
-import { refreshUserFromCookie } from "../../store/slices/authSlice";
 export const PrivateRoute = ({ component: Component, ...rest }) => {
-  const userCookie = Cookies.get("auth-jwt");
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth);
-  if (!user.username?.length && userCookie) dispatch(refreshUserFromCookie());
-
+  const auth = useAuth();
   return (
     <Route
       {...rest}
       render={(props) =>
-        userCookie ? (
+        auth ? (
           <Component {...props} />
         ) : (
           <Redirect
