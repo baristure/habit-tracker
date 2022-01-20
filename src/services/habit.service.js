@@ -10,6 +10,7 @@ import ApiError from "../utils/ApiError";
  * @returns {Promise<Habit>}
  */
 const createHabit = async (habitBody) => {
+  console.log({ habitBody });
   if (!ObjectId.isValid(habitBody.userId))
     throw new ApiError(httpStatus.BAD_REQUEST, "The userId is not valid");
   const checkHabit = await isHave(habitBody);
@@ -53,8 +54,8 @@ const getHabitsByUserId = async (userId) => {
 
 /**
  * Mark habit as done or not done
- * @param {ObjectId} id
- * @param {dateObj} date
+ * @param {ObjectId} habitId
+ * @param {dateObj} Object
  * @returns {Promise<Habit>}
  */
 const markHabit = async (habitId, dateObj) => {

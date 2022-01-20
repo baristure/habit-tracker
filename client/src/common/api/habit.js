@@ -5,20 +5,32 @@ let cookie = Cookies.get("auth-jwt");
 if (cookie) cookie = JSON.parse(cookie);
 
 const habitApi = {
-  addHabit: async (email, content, dates) => {
-    const response = await axios
-      .post("http://localhost:4000/api/habit/add", { email, content, dates })
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        return err.response;
-      });
-    return response;
+  addHabit: async (userId, content) => {
+    if (cookie) {
+      console.log(userId, content);
+      const response = await axios
+        .post(
+          "http://localhost:4000/api/habit/add",
+          { userId, content },
+          {
+            headers: {
+              Authorization: `Bearer ${cookie.token}`,
+            },
+          }
+        )
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          return err.response;
+        });
+      return response;
+    } else {
+      return { data: { code: 401, message: "Please login again!" } };
+    }
   },
   getHabit: async (habitID) => {
     if (cookie) {
-      console.log("girdi");
       const response = await axios
         .get("http://localhost:4000/api/habit/get/" + habitID, {
           headers: {
@@ -32,6 +44,31 @@ const habitApi = {
           return err.response;
         });
       return response;
+    } else {
+      return { data: { code: 401, message: "Please login again!" } };
+    }
+  },
+  markHabit: async (habitId, dateObj) => {
+    if (cookie) {
+      const response = await axios
+        .get(
+          "http://localhost:4000/api/habit/mark/",
+          { habitId, dateObj },
+          {
+            headers: {
+              Authorization: `Bearer ${cookie.token}`,
+            },
+          }
+        )
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          return err.response;
+        });
+      return response;
+    } else {
+      return { data: { code: 401, message: "Please login again!" } };
     }
   },
   getAllHabits: async (userId) => {
@@ -50,22 +87,37 @@ const habitApi = {
           return err.response;
         });
       return response;
+    } else {
+      return { data: { code: 401, message: "Please login again!" } };
     }
   },
   deleteHabit: async (email, username, password) => {
-    const response = await axios
-      .post("http://localhost:4000/api/habit/register", {
-        email,
-        username,
-        password,
-      })
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        return err.response;
-      });
-    return response;
+    if (cookie) {
+      const response = await axios
+        .post(
+          "http://localhost:4000/api/habit/register",
+          {
+            email,
+            username,
+            password,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${cookie.token}`,
+            },
+          }
+        )
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          return err.response;
+        });
+      return response;
+    } else {
+      return { data: { code: 401, message: "Please login again!" } };
+    }
   },
 };
 
