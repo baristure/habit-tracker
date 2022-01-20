@@ -36,7 +36,6 @@ export const markHabit = createAsyncThunk(
 export const addHabit = createAsyncThunk(
   "habits/add",
   async ({ userId, content }, { rejectWithValue }) => {
-    console.log(userId, content);
     try {
       const response = await habitApi.addHabit(userId, content);
       let data = response.data;

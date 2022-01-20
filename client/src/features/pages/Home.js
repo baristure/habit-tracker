@@ -46,6 +46,7 @@ const Home = () => {
 
   const sendHabit = async () => {
     await dispatch(addHabit({ userId: authState.id, content: habit }));
+    if (isSuccess) toast.success("Habits added successfully ✅");
     setHabit("");
     getHabits();
   };
@@ -60,10 +61,10 @@ const Home = () => {
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <div>
+                  <div className="px-4 text-center">
                     <input
                       id="habit-input"
-                      className="shadow border focus:outline-teal-500 w-9/12 rounded-lg  py-2 px-3 my-5 text-grey-darker"
+                      className="shadow border flex-grow  focus:outline-teal-500 w-7/12 rounded-lg py-2 px-3 my-5 mr-5 text-grey-darker"
                       required
                       value={habit}
                       onChange={(e) => setHabit(e.target.value)}
@@ -74,7 +75,7 @@ const Home = () => {
                       type="submit"
                       id="add-button"
                       data-testid="add-button"
-                      className="inline-flex items-center justify-center w-3/12 p-2 border-2 rounded-lg   border-teal hover:text-white  bg-teal-400 hover:bg-teal-500"
+                      className="flex-grow-0 items-center justify-center w-2/12 p-2 border-2 rounded-lg border-green-400 text-white bg-green-400 hover:bg-green-500"
                       onClick={sendHabit}
                       disabled={isFetching || !habit.length ? true : false}
                     >

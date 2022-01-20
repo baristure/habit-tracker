@@ -37,16 +37,13 @@ export const useAuth = () => {
       }
     });
     if (refreshCookie) {
-      console.log("refreshCookie  dispatch");
       dispatch(refreshUserFromCookie());
     } else if (refreshToken) {
       Cookies.remove("auth-jwt");
-      console.log("refreshToken  dispatch", cookieJson.refreshtoken);
       let token = cookieJson.refreshtoken;
       dispatch(refreshUser({ token }));
     } else {
       Cookies.remove("auth-jwt");
-      console.log("clearState  dispatch");
       dispatch(clearState());
     }
     return false;

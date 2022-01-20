@@ -7,7 +7,6 @@ if (cookie) cookie = JSON.parse(cookie);
 const habitApi = {
   addHabit: async (userId, content) => {
     if (cookie) {
-      console.log(userId, content);
       const response = await axios
         .post(
           "http://localhost:4000/api/habit/add",
