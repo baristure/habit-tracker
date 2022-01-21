@@ -1,9 +1,8 @@
 import moment from "moment";
-import { useSelector, useDispatch } from "react-redux";
-import toast, { Toaster } from "react-hot-toast";
+import { useDispatch } from "react-redux";
 
 import Checkbox from "./Checkbox";
-import { markHabit, habitSelector } from "../../store/slices/habitSlice";
+import { markHabit, deleteHabit } from "../../store/slices/habitSlice";
 export default function Habit({ habit, callBack }) {
   const startOfWeek = moment().startOf("isoWeek");
   const endOfWeek = moment().endOf("isoWeek");
@@ -15,21 +14,18 @@ export default function Habit({ habit, callBack }) {
     days.push(moment(day.toDate()).format("YYYY-MM-DD"));
     day = day.clone().add(1, "d");
   }
-  const dispach = useDispatch();
-  const { isSuccess } = useSelector(habitSelector);
+  const dispatch = useDispatch();
   const setHabitStatus = async (date, status) => {
     let dateObj = {
       date: date,
       complete: status,
     };
-    await dispach(markHabit({ habitId: habit._id, dateObj }));
+    await dispatch(markHabit({ habitId: habit._id, dateObj }));
     callBack();
   };
 
   return (
     <tr>
-      <Toaster />
-
       <td className="px-6 py-4 whitespace-nowrap">
         <span className="text-sm font-medium text-gray-500">
           {habit.content}
@@ -61,6 +57,17 @@ export default function Habit({ habit, callBack }) {
           </td>
         );
       })}
+      <td>
+        <button
+          className="bg-red-400	 rounded-xl text-white px-2 text-2xl	"
+          onClick={async () => {
+            await dispatch(deleteHabit(habit._id));
+            callBack();
+          }}
+        >
+          ␡
+        </button>
+      </td>
     </tr>
   );
 }

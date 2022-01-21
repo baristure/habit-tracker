@@ -12,6 +12,7 @@ import {
 import Habit from "../components/Habit";
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";
+
 const defaultWeekdays = Array.apply(null, Array(7)).map(function (_, i) {
   return moment(i, "e")
     .startOf("week")
@@ -86,7 +87,7 @@ const Home = () => {
                     <div className="grid justify-items-center py-60">
                       <Loader />
                     </div>
-                  ) : (
+                  ) : habits.length ? (
                     <div className="p-4 border-b border-gray-200">
                       <h4 className="text-center my-2">Habit List</h4>
                       <table className="p-4 min-w-full divide-y-2 divide-gray-200">
@@ -119,7 +120,7 @@ const Home = () => {
                             })}
 
                             <th scope="col" className="relative px-6 py-3">
-                              <span className="sr-only">Edit</span>
+                              <span className="sr-only"></span>
                             </th>
                           </tr>
                         </thead>
@@ -136,6 +137,8 @@ const Home = () => {
                         </tbody>
                       </table>
                     </div>
+                  ) : (
+                    <h4 className="text-center my-12">There is no habit</h4>
                   )}
                 </div>
               </div>

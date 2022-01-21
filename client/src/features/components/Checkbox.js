@@ -2,6 +2,7 @@ import { useState } from "react";
 
 export default function Checkbox({ date, value, index, callBack }) {
   const [val, setVal] = useState(value);
+
   const settingChange = (status) => {
     setVal(status);
     callBack(date, status);

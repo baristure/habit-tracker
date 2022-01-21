@@ -49,6 +49,22 @@ export const addHabit = createAsyncThunk(
     }
   }
 );
+export const deleteHabit = createAsyncThunk(
+  "habits/delete",
+  async (habitId, { rejectWithValue }) => {
+    try {
+      const response = await habitApi.deleteHabit(habitId);
+      let data = response.data;
+      if (response.status === 204) {
+        return data;
+      } else {
+        return rejectWithValue(data);
+      }
+    } catch (e) {
+      return rejectWithValue(e.response.message);
+    }
+  }
+);
 
 export const habitSlice = createSlice({
   name: "habit",
@@ -89,6 +105,20 @@ export const habitSlice = createSlice({
       state.errorMessage = payload.message;
     });
     builder.addCase(addHabit.pending, (state) => {
+      state.isFetching = true;
+    });
+    builder.addCase(deleteHabit.fulfilled, (state, { payload }) => {
+      state.isFetching = false;
+      state.isSuccess = true;
+      return state;
+    });
+    builder.addCase(deleteHabit.rejected, (state, { payload }) => {
+      state.isFetching = false;
+      state.isError = true;
+      state.code = payload.code;
+      state.errorMessage = payload.message;
+    });
+    builder.addCase(deleteHabit.pending, (state) => {
       state.isFetching = true;
     });
     builder.addCase(markHabit.fulfilled, (state, { payload }) => {

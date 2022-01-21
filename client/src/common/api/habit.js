@@ -90,15 +90,13 @@ const habitApi = {
       return { data: { code: 401, message: "Please login again!" } };
     }
   },
-  deleteHabit: async (email, username, password) => {
+  deleteHabit: async (habitId) => {
     if (cookie) {
       const response = await axios
         .post(
-          "http://localhost:4000/api/habit/register",
+          "http://localhost:4000/api/habit/delete",
           {
-            email,
-            username,
-            password,
+            habitId,
           },
           {
             headers: {
