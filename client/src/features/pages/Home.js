@@ -27,13 +27,13 @@ const Home = () => {
   const { isFetching, isSuccess, isError, errorMessage, habits, code } =
     useSelector(habitSelector);
 
+  function getHabits() {
+    if (authState.id) dispatch(getAllHabits({ userId: authState?.id }));
+  }
   useEffect(() => {
     getHabits();
   }, []);
 
-  function getHabits() {
-    if (authState.id) dispatch(getAllHabits({ userId: authState?.id }));
-  }
   useEffect(() => {
     if (isError) {
       toast.success(errorMessage);
@@ -126,7 +126,11 @@ const Home = () => {
                         <tbody className="bg-white divide-y-2 divide-gray-200  ">
                           {habits.map((habit, index) => {
                             return (
-                              <Habit habit={habit} key={"habit-" + index} />
+                              <Habit
+                                habit={habit}
+                                key={"habit-" + index}
+                                callBack={getHabits}
+                              />
                             );
                           })}
                         </tbody>

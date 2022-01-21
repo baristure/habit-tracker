@@ -1,9 +1,10 @@
 import moment from "moment";
-import { useDispatch } from "react-redux";
-import Checxbox from "./Checkbox";
+import { useSelector, useDispatch } from "react-redux";
+import toast, { Toaster } from "react-hot-toast";
 
-import { markHabit } from "../../store/slices/habitSlice";
-export default function Habit({ habit }) {
+import Checkbox from "./Checkbox";
+import { markHabit, habitSelector } from "../../store/slices/habitSlice";
+export default function Habit({ habit, callBack }) {
   const startOfWeek = moment().startOf("isoWeek");
   const endOfWeek = moment().endOf("isoWeek");
 
@@ -15,17 +16,20 @@ export default function Habit({ habit }) {
     day = day.clone().add(1, "d");
   }
   const dispach = useDispatch();
-
+  const { isSuccess } = useSelector(habitSelector);
   const setHabitStatus = async (date, status) => {
     let dateObj = {
       date: date,
       complete: status,
     };
-    await dispach(markHabit(habit.id, dateObj));
+    await dispach(markHabit({ habitId: habit._id, dateObj }));
+    callBack();
   };
 
   return (
     <tr>
+      <Toaster />
+
       <td className="px-6 py-4 whitespace-nowrap">
         <span className="text-sm font-medium text-gray-500">
           {habit.content}
@@ -40,14 +44,14 @@ export default function Habit({ habit }) {
             {habit.dates.some(
               (habitDay) => habitDay.date === day && habitDay.complete === true
             ) ? (
-              <Checxbox
+              <Checkbox
                 date={day}
                 index={index}
                 value={true}
                 callBack={setHabitStatus}
               />
             ) : (
-              <Checxbox
+              <Checkbox
                 date={day}
                 index={index}
                 value={false}

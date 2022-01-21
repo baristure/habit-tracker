@@ -50,7 +50,7 @@ const habitApi = {
   markHabit: async (habitId, dateObj) => {
     if (cookie) {
       const response = await axios
-        .get(
+        .post(
           "http://localhost:4000/api/habit/mark/",
           { habitId, dateObj },
           {
